@@ -1,6 +1,6 @@
 ﻿namespace AutomobileWinform
 {
-    partial class Form1
+    partial class frmCarDetails
     {
         /// <summary>
         ///  Required designer variable.
@@ -151,7 +151,7 @@
             btnCancel.UseVisualStyleBackColor = true;
             btnCancel.Click += btnCancel_Click;
             // 
-            // Form1
+            // frmCarDetails
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -168,10 +168,10 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Form1";
+            Name = "frmCarDetails";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "frmCarDetails";
-            Load += Form1_Load;
+            Load += frmCarDetails_Load;
             ResumeLayout(false);
             PerformLayout();
         }

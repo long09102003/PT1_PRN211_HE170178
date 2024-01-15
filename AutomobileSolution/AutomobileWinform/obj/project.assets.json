@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net5.0-windows7.0": {}
+    "net5.0-windows7.0": {
+      "AutomobileLibrary/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/AutomobileLibrary.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AutomobileLibrary.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "AutomobileLibrary/1.0.0": {
+      "type": "project",
+      "path": "../AutomobileSolution/AutomobileLibrary.csproj",
+      "msbuildProject": "../AutomobileSolution/AutomobileLibrary.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net5.0-windows7.0": []
+    "net5.0-windows7.0": [
+      "AutomobileLibrary >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\user\\.nuget\\packages\\": {}
@@ -33,7 +52,11 @@
       "frameworks": {
         "net5.0-windows7.0": {
           "targetAlias": "net5.0-windows",
-          "projectReferences": {}
+          "projectReferences": {
+            "E:\\ki5\\PRN211\\PT1_PRN211_HE170178\\AutomobileSolution\\AutomobileSolution\\AutomobileLibrary.csproj": {
+              "projectPath": "E:\\ki5\\PRN211\\PT1_PRN211_HE170178\\AutomobileSolution\\AutomobileSolution\\AutomobileLibrary.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

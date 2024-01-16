@@ -12,9 +12,9 @@ namespace AutomobileLibrary.DataAccess
     {
         //Initialize car list
         private static List<Car> CarList = new List<Car>() {
-            new Car{ CarID = 1, CarName = "CRV", Manufacturner = "Honda",
+            new Car{ CarID = 1, CarName = "CRV", Manufacturer = "Honda",
                 Price = 30000, ReleaseYear = 2021},
-            new Car{ CarID = 2, CarName = "Ford Focus", Manufacturner = "Ford",
+            new Car{ CarID = 2, CarName = "Ford Focus", Manufacturer = "Ford",
                 Price = 15000, ReleaseYear = 2020}
 
         };

@@ -1,6 +1,4 @@
-﻿using AutomobileLibrary.BussinessObject;
-using AutomobileLibrary.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,153 +6,70 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutomobileLibrary.BussinessObject;
+using AutomobileLibrary.Repository;
 using System.Windows.Forms;
 
 namespace AutomobileWinform
 {
-    public partial class frmCarManagement : Form
+    public partial class frmCarDetails : Form
     {
 
-        IcarRepository carRepository = new CarRepository();
-        //Create a data source
-
-        BindingSource source;
-
-        public frmCarManagement()
+        public frmCarDetails()
         {
             InitializeComponent();
         }
 
-        private void frmCarManagement_Load(object sender, EventArgs e)
-        {
-            btnDelete.Enabled = false;
-            //Register this event to open the frmCarDetail form that performs updating
-            dgvCarList.CellDoubleClick += DgvCarList_CellDoubleClick;
-        }
+        public IcarRepository CarRepository { get; set; }
+        public bool InsertOrUpdate { get; set; }
 
-        private void DgvCarList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        public Car CarInfo { get; set; }
+
+
+        private void frmCarDetails_Load(object sender, EventArgs e)
         {
-            frmCarDetails frmCarDetails = new frmCarDetails
+            cboManufacturer.SelectedIndex = 0;
+            txtCarID.Enabled = !InsertOrUpdate;
+            if (InsertOrUpdate == true)
             {
-                Text = "Update car",
-                InsertOrUpdate = true,
-                CarInfo = GetCarObect(),
-                CarRepository = carRepository
-            };
-            if (frmCarDetails.ShowDialog() == DialogResult.OK)
-            {
-                LoadCarList();
-                //Set focus car update
-                source.Position = source.Count - 1;
+                //Show car to perform updating
+                txtCarID.Text = CarInfo.CarID.ToString();
+                txtCarName.Text = CarInfo.CarName;
+                txtPrice.Text = CarInfo.Price.ToString();
+                txtReleaseYear.Text = CarInfo.ReleaseYear.ToString();
+                cboManufacturer.Text = CarInfo.Manufacturer.Trim();
             }
         }
 
-        // Clear text on TextBoxes
-        private void ClearText()
+        
+        private void btnSave_Click(object sender, EventArgs e)
         {
-            txtCarID.Text = string.Empty;
-            txtCarName.Text = string.Empty;
-            txtManufacturer.Text = string.Empty;
-            txtPrice.Text = string.Empty;
-            txtReleaseYear.Text = string.Empty;
-        }
-        private void LoadCarList()
-        {
-            var cars = carRepository.GetCars();
             try
             {
-                // The Binding Source component is designed to simplify
-                // The process of binding controls to an underlying data source
-                source = new BindingSource();
-                source.DataSource = cars;
-
-                txtCarID.DataBindings.Clear();
-                txtCarName.DataBindings.Clear();
-                txtManufacturer.DataBindings.Clear();
-                txtPrice.DataBindings.Clear();
-                txtReleaseYear.DataBindings.Clear();
-
-                txtCarID.DataBindings.Add("Text", source, "CarID");
-                txtCarName.DataBindings.Add("Text", source, "CarName");
-                txtManufacturer.DataBindings.Add("text", source, "Manufacturer");
-                txtPrice.DataBindings.Add("Text", source, "Price");
-                txtReleaseYear.DataBindings.Add("Text", source, "ReleaseYear");
-
-                dgvCarList.DataSource = null;
-                dgvCarList.DataSource = source;
-                if (cars.Count() == 0)
-                {
-                    ClearText();
-                    btnDelete.Enabled = false;
-                }
-                else
-                {
-                    btnDelete.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Load car list");
-            }
-        }
-
-        private Car GetCarObect()
-        {
-            Car car = null;
-            try
-            {
-                car = new Car
+                var car = new Car
                 {
                     CarID = int.Parse(txtCarID.Text),
                     CarName = txtCarName.Text,
-                    Manufacturner = txtManufacturer.Text,
+                    Manufacturer = cboManufacturer.Text,
                     Price = decimal.Parse(txtPrice.Text),
                     ReleaseYear = int.Parse(txtReleaseYear.Text)
                 };
+                if (InsertOrUpdate == false)
+                {
+                    CarRepository.InsertCar(car);
+                }
+                else
+                {
+                    CarRepository.UpdateCar(car);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Get car");
-            }
-            return car;
-        }
+                MessageBox.Show(ex.Message, InsertOrUpdate == false ? "Add a new car" : "Update a car");
 
-        private void btnLoad_Click(object sender, EventArgs e)
-        {
-            LoadCarList();
-        }
-
-        private void btnNew_Click(object sender, EventArgs e)
-        {
-            frmCarDetails frmCarDetails = new frmCarDetails
-            {
-                Text = "Add car",
-                InsertOrUpdate = false,
-                CarRepository = carRepository
-            };
-            if (frmCarDetails.ShowDialog() == DialogResult.OK)
-            {
-                LoadCarList();
-                //Set focus car inserted
-                source.Position = source.Count - 1;
             }
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var car = GetCarObect();
-                carRepository.DeleteCar(car.CarID);
-                LoadCarList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Delete a car");
-            }
-        }
-
-        private void btnClose_Click(object sender, EventArgs e) => Close();
-        
+        private void btnCancel_Click(object sender, EventArgs e) => Close();
     }
 }
